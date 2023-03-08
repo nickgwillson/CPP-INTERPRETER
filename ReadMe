@@ -1,4 +1,4 @@
-This C++ program is an interpreter made by me, which given a set of language rules (LanguageRules.png in repository)
+This C++ program is an interpreter, which given a set of language rules (LanguageRules.png in repository)
 you can write and execute scripts of this custom language.
 
 You can also see an example of this programs output by looking at the Code-Example.png photo found on this repo page, 
