@@ -1,2 +1,26 @@
-radius = 2;
-area = 3.14 * radius * radius;
+display "***********************************";
+read x;
+display x;
+if (x==2)
+{
+display "inside if loop yay";
+read x;
+display x;
+read g;
+display g;
+}
+else
+{
+display "inside else loop yay";
+read height;
+read length;
+area = length * height;
+display area;
+}
+read d;
+display d;
+display x;
+display area;
+display g;
+display "***********************************";
+display "***********************************";

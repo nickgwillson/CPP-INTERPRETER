@@ -18,6 +18,19 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="expEvaluator.cpp" />
+    <ClCompile Include="interface.cpp" />
+    <ClCompile Include="Interpreter.cpp" />
+    <ClCompile Include="lexScanner.cpp" />
+    <ClCompile Include="main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="expEvaluator.h" />
+    <ClInclude Include="interface.h" />
+    <ClInclude Include="Interpreter.h" />
+    <ClInclude Include="lexScanner.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{91E24888-F414-4738-ADB4-01C223ADA662}</ProjectGuid>
@@ -114,19 +127,6 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="expEvaluator.cpp" />
-    <ClCompile Include="interface.cpp" />
-    <ClCompile Include="Interpreter.cpp" />
-    <ClCompile Include="lexScanner.cpp" />
-    <ClCompile Include="main.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="expEvaluator.h" />
-    <ClInclude Include="interface.h" />
-    <ClInclude Include="Interpreter.h" />
-    <ClInclude Include="lexScanner.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

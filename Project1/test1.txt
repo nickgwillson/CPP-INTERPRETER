@@ -1,2 +1,26 @@
-w = 2 + 1;
-display w;
+read x;
+display x;
+if (x==2)
+{
+display "Enter the length of the Box";
+	read length;
+	display length;
+	display "Enter the Height of the Box";
+	read height;
+	display height;
+	display "Enter the Width of the Box";
+	read width;
+	display width;
+	v = length*width*height
+	display "The volume of the box is ";
+	display v;
+	display "";
+	display "Would you like to calculate another volume (0 for no, 1 for yes)?";
+	read answer;
+}
+else
+{
+display "In else statement";
+}
+display v;
+disaply "*********************************************";

@@ -2,6 +2,7 @@ display "**********************************************";
 display "Finding the Volume of a Box";
 display "";
 answer= 1;
+display answer;
 while (answer == 1)
 {
 	display "Enter the length of the Box";
@@ -10,7 +11,7 @@ while (answer == 1)
 	read height;
 	display "Enter the Width of the Box";
 	read width;
-	v = (length*width*height)
+	v = length*width*height
 	display "The volume of the box is ";
 	display v;
 	display "";

@@ -1,6 +1,11 @@
 ﻿  Interpreter.cpp
-C:\Users\David Willson\Desktop\School\Comp Sci\Programming Languages\Project4\Project1\Interpreter.cpp(35,23): warning C4018: '<': signed/unsigned mismatch
-C:\Users\David Willson\Desktop\School\Comp Sci\Programming Languages\Project4\Project1\Interpreter.cpp(86,24): warning C4018: '<': signed/unsigned mismatch
-C:\Users\David Willson\Desktop\School\Comp Sci\Programming Languages\Project4\Project1\Interpreter.cpp(126,23): warning C4018: '<': signed/unsigned mismatch
-C:\Users\David Willson\Desktop\School\Comp Sci\Programming Languages\Project4\Project1\Interpreter.cpp(162): warning C4715: 'Interpreter::executeProgram': not all control paths return a value
-  Project1.vcxproj -> C:\Users\David Willson\Desktop\School\Comp Sci\Programming Languages\Project4\Debug\Project1.exe
+C:\Users\David Willson\Desktop\School\Comp Sci\Programming Languages\Project4(b b )\Project1\Interpreter.cpp(35,23): warning C4018: '<': signed/unsigned mismatch
+C:\Users\David Willson\Desktop\School\Comp Sci\Programming Languages\Project4(b b )\Project1\Interpreter.cpp(81,24): warning C4018: '<': signed/unsigned mismatch
+C:\Users\David Willson\Desktop\School\Comp Sci\Programming Languages\Project4(b b )\Project1\Interpreter.cpp(134,33): warning C4018: '<': signed/unsigned mismatch
+C:\Users\David Willson\Desktop\School\Comp Sci\Programming Languages\Project4(b b )\Project1\Interpreter.cpp(187,32): warning C4018: '<': signed/unsigned mismatch
+C:\Users\David Willson\Desktop\School\Comp Sci\Programming Languages\Project4(b b )\Project1\Interpreter.cpp(196,31): warning C4018: '<': signed/unsigned mismatch
+C:\Users\David Willson\Desktop\School\Comp Sci\Programming Languages\Project4(b b )\Project1\Interpreter.cpp(223,31): warning C4018: '<': signed/unsigned mismatch
+C:\Users\David Willson\Desktop\School\Comp Sci\Programming Languages\Project4(b b )\Project1\Interpreter.cpp(237,33): warning C4018: '<': signed/unsigned mismatch
+C:\Users\David Willson\Desktop\School\Comp Sci\Programming Languages\Project4(b b )\Project1\Interpreter.cpp(274,22): warning C4018: '<': signed/unsigned mismatch
+C:\Users\David Willson\Desktop\School\Comp Sci\Programming Languages\Project4(b b )\Project1\Interpreter.cpp(308): warning C4715: 'Interpreter::executeProgram': not all control paths return a value
+  Project1.vcxproj -> C:\Users\David Willson\Desktop\School\Comp Sci\Programming Languages\Project4(b b )\Debug\Project1.exe

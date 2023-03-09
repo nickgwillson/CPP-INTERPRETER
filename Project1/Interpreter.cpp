@@ -20,7 +20,7 @@ bool Interpreter::executeProgram(vector<string> & sourceProgram)
 	vectOfCategoryVects tempCatVec;
 	vectOfTokenVects tempTokVec;
 
-
+	
 	floatVarValueTable varTable;
 	perLineCategoryVector categoryVec;
 	perLineTokenVector tokenVec;
@@ -43,116 +43,265 @@ bool Interpreter::executeProgram(vector<string> & sourceProgram)
 		switch (categoryVec[0])
 		{
 		case KEYWORD:
-
+		{
 			if (tokenVec[0] == "read")			// read <var>
 			{ // Prompt the user for a numerical value and store it in the Symbol 
 				//Table using <var> (i.e. the variable name) as the key
 
 				var = tokenVec[1];
-				cout << "What is the variables numerical value?\n";
+				std::cout << "What is the variables numerical value?" << endl;
 				cin >> key;
-				varTable.insert({ var, key });
-
+				varTable.emplace(var, key);				
 
 			}
+
 			else if (tokenVec[0] == "display")
 			{
-
-				if (categoryVec[1] == ID_NAME)  // display <exp>  // ie display v
+				if (LexicalScanner::isID_NAME(tokenVec[1]))  // display <exp>  // ie display v
 				{
-					cout << tokenVec[1] << " is " << varTable[tokenVec[1]] << endl;
+			
+					std::cout << tokenVec[1] << " is " << varTable[tokenVec[1]] << endl;
+
+			
 				}
-				else if (categoryVec[1] == STRING_LITERAL)	  // display <string>
+				else if (LexicalScanner::isSTRING_LITERAL(tokenVec[1]))	  // display <string>
 				{	//Display the contents of the string literal, without the double quotes
 
 					string str;
 					str = tokenVec[1];
 					str.erase(remove(str.begin(), str.end(), '\"'), str.end());	//removes quotes
-					cout << str;
-
+					std::cout << str << endl;
 				}
-				else
+				else	//else it is an expression
 				{
-					//else it is an expression
-				   //Use the Expression Evaluator module to evaluate the <expr>
-				   //and display the result on the screen
-				   //check that it can evaluate
-
+					
 					float expression = 0;
 					perLineTokenVector tempVector;
 
 					for (int i = 1; i < tokenVec.size() - 1; i++)		//putting expression into new vector
 					{
 						tempVector.push_back(tokenVec[i]);
-			
 					}
 
-					
 					//testing the expression
 
 					while (!ExpressionEvaluator::infixEvaluator(tempVector, varTable, expression))
 					{
-						cout << "Expression cannot be evaluated!" << endl;
+						std::cout << "Expression cannot be evaluated!" << endl;
 						return 0;
 					}
 					string exp;
 					LexicalScanner::getPerLineTokenVectFromOneStringObject(exp, tempVector);
 					ExpressionEvaluator::infixEvaluator(tempVector, varTable, expression); //the vartable should hold all variables and their number
 
-						cout << "The Expression equals: " << expression << endl;
-
-
-
+					std::cout << "The Expression equals: " << expression << endl;
 				}
 
 
 			}
-			break;
-		case ID_NAME:
-			if (categoryVec[1] == ASSIGNMENT_OP)	 //<var> = ....
+			else if (tokenVec[0] == "while")
 			{
-
-				//Use the Expression Evaluator module to evaluate the <expr> on the right of the
-				//assignment operator. Then store the evaluation result in the Symbol Table 
-				//using <var> (i.e.the variable name) as the key, check that it can eval. (!execute)
-				//if there is a variable in the expression that isnt in symbol table display message
-
 				float expression = 0;
-				perLineTokenVector tempVector;
-				string	exp;
+				perLineTokenVector tempExpVector;
 
-				for (int i = 2; i < tokenVec.size() - 1; i++)		 //putting exp into vector
+				for (size_t i = 2; i < tokenVec.size()-1; i++)				 //extracting logical expression into tempExpvector
 				{
-					tempVector.push_back(tokenVec[i]);
+					if (LexicalScanner::isLEFT_PARENTHESIS(tokenVec[1]))
+					{
+						if (tokenVec[i] == ")")	 //end of if ()
+							i = 20;
+						else					//hasn't hit other parethesis, push tokens into vector
+							tempExpVector.push_back(tokenVec[i]);   //push expression into temp vector
+						//std::cout << tokenVec[i] << endl;
+					}
+					else
+						std::cout << "Error: there needs to be a parenthesis after 'while'" << endl;
+
 				}
+				
+					int stack = i;
+					vector<string> tempProgram;
+					tempProgram.push_back(sourceProgram[stack]);
+					ExpressionEvaluator::infixEvaluator(tempProgram, varTable, expression);
 
-				//testing the expression
-				while (!ExpressionEvaluator::infixEvaluator(tempVector, varTable, expression))
-				{
-					cout << "Expression cannot be evaluated!" << endl;
-					return 0;
-				}
+					while (expression == 0)
+					{
+						//execute the program contained between the curly brackets
 
-				LexicalScanner::getPerLineTokenVectFromOneStringObject(exp, tempVector);
-				ExpressionEvaluator::infixEvaluator(tempVector, varTable, expression); //the vartable should hold all variables and their nu
-				varTable.insert({ tokenVec[0], expression });//insert new var definition into table
-
-				cout << "The Expression has '" << tokenVec[0] << "' equaling " << expression << endl;
+						if (LexicalScanner::isLEFT_CURLYBRACE(sourceProgram[i + 1]))
+						{
+							for (size_t x = i + 2; x < size; x++)	//going through until next curlybrace
+							{
+								if (sourceProgram[x] == "}")
+								{
+									i = x + 1;
+									x = size + 1;
+								}
+								else	//execute the lines of statemetn inbetween the curly brackets
+								{
+									vector<string> tempProgram;
+									tempProgram.push_back(sourceProgram[x]);
+									Interpreter::executeProgram(tempProgram);
+									ExpressionEvaluator::infixEvaluator(tempProgram, varTable, expression);
+									
+									if (varTable[tokenVec[2]] == 0)	//checking if var in while exp has changed to 0
+										expression = 1;
+									
+								}
+							}
+						}
+						else
+							std::cout << "Error: Need a curlybrace after while statement" << endl;
+							
+					}
+					//	For while blocks (e.g. while (<logic-expr>)<nl>{<nl><lines><nl>}), the Interpreter should jump 
+					 //	back to the line containing the while keyword until the <logic-expr> evaluates to false or 0. 
+					 //	Thus, line number should be stored on the stack,
+					 //	in order to be able to jump to it
 
 			}
-			else
+			else if (tokenVec[0] == "if")
 			{
-				cout << "there must have been an error\n";
+				float expression = 0;
+				perLineTokenVector tempExpVector;
+
+				for (size_t i = 2; i < tokenVec.size(); i++)				 //extracting logical expression
+				{
+					if (LexicalScanner::isLEFT_PARENTHESIS(tokenVec[1]))
+					{
+						if (tokenVec[i] == ")")			 //end of if ()
+							i = tokenVec.size() +1;
+						else							//hasn't hit other parethesis, push tokens into vector
+							tempExpVector.push_back(tokenVec[i]);   //push expression into temp vector
+					}
+					else
+						std::cout << "Error: there needs to be a parenthesis after 'if'" << endl;
+				}
+				string exp;
+				ExpressionEvaluator::infixEvaluator(tempExpVector, varTable, expression);
+				if (expression == 1)	//evaluate the expression, if expression workds
+				{
+					if (LexicalScanner::isLEFT_CURLYBRACE(sourceProgram[i + 1]))
+					{
+						for (size_t x = i + 2; x < size; x++)	//going through until next curlybrace
+						{
+							if (sourceProgram[x] == "}")
+							{
+								i = x + 1;
+								x = size + 1;
+
+								if (sourceProgram[i] == "else")	   //if there is an else statement after the if
+								{
+									for (size_t x = i; x < size; x++)	   //used to skip over the else statement 
+									{
+										if (sourceProgram[x] == "}")	  //if the if statement doesn't work then 
+										{								// disregard all lines till next curly brace
+											i = x;				//go to next line ie. "else"
+											x = size + 1;		  //stopping for loop
+										}
+									}
+
+								}
+							}
+							else	//execute the lines of statemetn inbetween the curly brackets
+							{
+									vector<string> tempProgram;
+									tempProgram.push_back(sourceProgram[x]);
+									Interpreter::executeProgram(tempProgram);
+									
+							}
+						}
+					}
+					else
+						std::cout << "Error: Need a curlybrace after if statement" << endl;
+
+				}
+				else	  //else expression returns false, check for else statemtn and disregard if {...}
+				{
+
+					for (size_t x = i + 2; x < size; x++)	//going through until next curlybrace
+					{
+
+						if (sourceProgram[x] == "}")	  //if the if statement doesn't work then 
+						{								// disregard all lines till next curly brace
+							i = x + 1;
+							x = size + 1;
+						}
+					}
+
+					if (sourceProgram[i] == "else")	 //if line after if statemtn is else
+					{
+						if (LexicalScanner::isLEFT_CURLYBRACE(sourceProgram[i + 1])) //checking for curly brace
+						{
+							for (size_t x = i + 2; x < size; x++)	//going through until next curlybrace
+							{
+								if (sourceProgram[x] == "}")
+								{
+									i = x;						//good
+									x = size + 1;			
+								}
+								else	//execute the lines of statemetn inbetween the curly brackets
+								{
+									vector<string> tempProgram;
+									tempProgram.push_back(sourceProgram[x]);	 //good
+									executeProgram(tempProgram);
+								}
+							}
+							
+						}
+						else
+							std::cout << "Error: Need a curlybrace after else statement" << endl;
+					}
+				}
 			}
 			break;
+		}					//end of case statement
 
+		case ID_NAME:
+		{		if (categoryVec[1] == ASSIGNMENT_OP)	 //<var> = ....
+		{
+
+			//Use the Expression Evaluator module to evaluate the <expr> on the right of the
+			//assignment operator. Then store the evaluation result in the Symbol Table 
+			//using <var> (i.e.the variable name) as the key, check that it can eval. (!execute)
+			//if there is a variable in the expression that isnt in symbol table display message
+
+			float expression = 0;
+			perLineTokenVector tempVector;
+			string	exp;
+
+			for (int i = 2; i < tokenVec.size() - 1; i++)		 //putting exp into vector
+			{
+				tempVector.push_back(tokenVec[i]);
+			}
+
+			//testing the expression
+			while (!ExpressionEvaluator::infixEvaluator(tempVector, varTable, expression))
+			{
+				std::cout << "Expression cannot be evaluated!" << endl;
+				return 0;
+			}
+
+			LexicalScanner::getPerLineTokenVectFromOneStringObject(exp, tempVector);
+			ExpressionEvaluator::infixEvaluator(tempVector, varTable, expression); //the vartable should hold all variables and their nu
+			varTable.insert({ tokenVec[0], expression });//insert new var definition into table
+
+			std::cout << "The Expression has '" << tokenVec[0] << "' equaling " << expression << endl;
+
+		}
+		else
+		{
+			std::cout << "Error: invalid syntax\n";
+		}
+		break;
+		}
 		default:
-			cout << "SYNTAX ERROR\n";
+			std::cout << "SYNTAX ERROR - ";
+			std::cout << sourceProgram[i] << endl;
+	
 			return 0;
 			break;
 		}
 
-
 	}
-
 }

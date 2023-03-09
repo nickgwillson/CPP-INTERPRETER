@@ -1,0 +1,4 @@
+read x;
+display "You Entered the Number:";
+display x;
+display "***************************************"
